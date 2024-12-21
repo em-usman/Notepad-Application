@@ -31,16 +31,13 @@ menu = tk.Menu(root)
 root.config(menu=menu)  # Link the menu to the root window
 
 
-<<<<<<< HEAD
 
 # Add View Menu (ensure View menu is working correctly):
 viewMenu = View(root, text_area)
 menu.add_cascade(label="View", menu=viewMenu)
-=======
 # Add File Menu:
 fileMenu = File(root, text_area)
 menu.add_cascade(label="File", menu=fileMenu)
->>>>>>> c6078330690aa53f2dd042870a919b496852c919
 
 # Add View Menu (ensure View menu is working correctly):
 viewMenu = View(root, text_area)
