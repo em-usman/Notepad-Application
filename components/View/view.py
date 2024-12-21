@@ -9,7 +9,7 @@ def View(root, text_area):
     word_wrap = True
 
     # Base path calculation for the icons
-    base_path = os.path.dirname(os.path.abspath(_file_))
+    base_path = os.path.dirname(os.path.abspath(__file__))
     icons_dir = os.path.abspath(os.path.join(base_path, '../../icons2'))
 
     # Function to safely load and resize icons
