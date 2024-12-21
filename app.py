@@ -1,5 +1,5 @@
 import tkinter as tk
-from components.File.file import File
+from components.View.view import View
 
 # Start the GUI:
 root = tk.Tk()
@@ -29,9 +29,11 @@ text_area.pack(expand=1, fill="both")
 menu = tk.Menu(root)
 root.config(menu=menu)  # Link the menu to the root window
 
-# Add File Menu:
-fileMenu = File(root, text_area)
-menu.add_cascade(label="File", menu=fileMenu)
+
+
+# Add View Menu (ensure View menu is working correctly):
+viewMenu = View(root, text_area)
+menu.add_cascade(label="View", menu=viewMenu)
 
 # End the GUI:
 root.mainloop()
