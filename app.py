@@ -34,10 +34,5 @@ root.config(menu=menu)  # Link the menu to the root window
 fileMenu = File(root, text_area)
 menu.add_cascade(label="File", menu=fileMenu)
 
-# Add View Menu (ensure View menu is working correctly):
-viewMenu = View(root, text_area)
-menu.add_cascade(label="View", menu=viewMenu)
-
-
 # End the GUI:
 root.mainloop()
