@@ -1,6 +1,6 @@
 import tkinter as tk
-from tkinter import * 
-from components.File.file import File 
+from components.File.file import File
+from components.View.view import View
 
 # Start the GUI:
 root = tk.Tk()
@@ -19,15 +19,25 @@ center_window(root, 800, 600)
 # Set window title:
 root.title("Notepad Application")
 
+# App icon set:
+root.wm_iconbitmap('mainicon.ico')
 
-## ------------ Add your widgets here ------------ ##
-File(root)
+# Create the main text area:
+text_area = tk.Text(root, wrap="word", undo=True, font=("Arial", 12))
+text_area.pack(expand=1, fill="both")
 
+# Initialize the main menu:
+menu = tk.Menu(root)
+root.config(menu=menu)  # Link the menu to the root window
 
+# Add File Menu:
+fileMenu = File(root, text_area)
+menu.add_cascade(label="File", menu=fileMenu)
 
+# Add View Menu (ensure View menu is working correctly):
+viewMenu = View(root, text_area)
+menu.add_cascade(label="View", menu=viewMenu)
 
-## ------------ Add your widgets here ------------ ##
 
 # End the GUI:
 root.mainloop()
-
