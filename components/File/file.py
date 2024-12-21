@@ -165,3 +165,6 @@ def File(root, text_area):
     root.bind("<Control-q>", exit_func)
 
     return file_menu
+
+
+
