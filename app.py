@@ -1,7 +1,6 @@
 import tkinter as tk
 from components.File.file import File
 
-
 # Start the GUI:
 root = tk.Tk()
 
