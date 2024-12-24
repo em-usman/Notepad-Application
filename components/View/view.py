@@ -2,11 +2,20 @@ import tkinter as tk
 from tkinter import Menu, messagebox
 import os
 import subprocess
+from components.Toolbar.toolbar import toolbar
 
-def View(root, text_area):
-    global font_size, status_bar, word_wrap
+
+import tkinter as tk
+from tkinter import Menu, messagebox
+
+def View(root, text_area,toolbar_frame):
+    global font_size, status_bar, word_wrap,toolbar_visible,status_bar_visible
     font_size = 12
     word_wrap = True
+    toolbar_visible = True  # Set toolbar visible by default
+    status_bar_visible = True  # Initialize status_bar_visible
+    # toolbar_frame = None  # To store the toolbar frame
+
 
     # Base path calculation for the icons
     base_path = os.path.dirname(os.path.abspath(__file__))
@@ -27,6 +36,7 @@ def View(root, text_area):
         run_icon = load_icon('run.png')
         status_bar_icon = load_icon('status_bar.png')
         word_wrap_icon = load_icon('word_wrap.png')
+        toolbar_icon = load_icon('tool_bar.png')
     except FileNotFoundError as e:
         print(e)
         messagebox.showerror("Icon Error", f"An error occurred while loading icons:\n{e}")
@@ -38,10 +48,12 @@ def View(root, text_area):
     root.run_icon = run_icon
     root.status_bar_icon = status_bar_icon
     root.word_wrap_icon = word_wrap_icon
+    root.toolbar_icon = toolbar_icon
 
-    # Define status bar:
+    # Define the status bar:
     status_bar = tk.Label(root, text="Line 1, Column 1", anchor="e")
     status_bar.pack(side="bottom", fill="x")
+
 
     def update_status_bar(event=None):
         line, column = text_area.index("insert").split(".")
@@ -61,19 +73,44 @@ def View(root, text_area):
             font_size -= 2
             text_area.config(font=("Arial", font_size))
 
-    def toggle_status_bar():
-        if status_bar.winfo_viewable():
-            status_bar.pack_forget()
-            viewMenu.entryconfig("Toggle Status Bar", image=root.status_bar_icon, label="Show Status Bar")
+    # Assuming `root` is your Tk instance
+    def initialize_root(root):
+        # Set a default value for status_bar visibility
+        root.status_bar_visible = True
+
+    def toggle_status_bar(root):
+        global status_bar_visible  # Reference the global status_bar_visible
+        if status_bar_visible:
+            status_bar.pack_forget()  # Hide the status bar
         else:
-            status_bar.pack(side="bottom", fill="x")
-            viewMenu.entryconfig("Toggle Status Bar", image=root.status_bar_icon, label="Hide Status Bar")
+            status_bar.pack(side="bottom", fill="x")  # Show the status bar
+
+        status_bar_visible = not status_bar_visible  # Toggle the visibility state
 
     def toggle_word_wrap():
         global word_wrap
         word_wrap = not word_wrap
         text_area.config(wrap="word" if word_wrap else "none")
-        viewMenu.entryconfig("Toggle Word Wrap", image=root.word_wrap_icon, label="Disable Word Wrap" if word_wrap else "Enable Word Wrap")
+        viewMenu.entryconfig(3, label="Disable Word Wrap" if word_wrap else "Enable Word Wrap",
+        image=root.word_wrap_icon)
+
+    def toggle_toolbar(toolbar_frame, text_area, root):
+        global toolbar_visible
+
+        if toolbar_visible:
+            # Hide the toolbar
+            if toolbar_frame.winfo_ismapped():
+                toolbar_frame.pack_forget()
+        else:
+            # Show the toolbar above the text area
+            if not toolbar_frame.winfo_ismapped():
+                toolbar_frame.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
+                text_area.pack_forget()  # Temporarily remove text area
+                text_area.pack(expand=1, fill="both")  # Repack text area below the toolbar
+
+        toolbar_visible = not toolbar_visible  # Toggle visibility state
+
+
 
     def run_code():
         code = text_area.get("1.0", "end").strip()
@@ -111,27 +148,36 @@ def View(root, text_area):
     )
     viewMenu.add_separator()
     viewMenu.add_command(
-        label="Toggle Status Bar",
-        image=root.status_bar_icon,
-        compound=tk.LEFT,
-        accelerator="Ctrl+Shift+S",
-        command=toggle_status_bar
-    )
-    viewMenu.add_command(
         label="Toggle Word Wrap",
         image=root.word_wrap_icon,
         compound=tk.LEFT,
         accelerator="Ctrl+Shift+W",
         command=toggle_word_wrap
     )
+    viewMenu.add_separator()
+    viewMenu.add_command(
+    label="Toggle Status Bar",
+    image=root.status_bar_icon,
+    compound=tk.LEFT,
+    accelerator="Ctrl+Shift+S",
+    command=lambda: toggle_status_bar(root)  # Pass root explicitly here
+    )
 
-        # Bind shortcut keys
+    viewMenu.add_command(
+        label="Toggle Toolbar",
+        image=root.toolbar_icon,
+        compound=tk.LEFT,
+        accelerator="Ctrl+Shift+T",
+        command=lambda: toggle_toolbar(toolbar_frame, text_area, root)
+    )
+
+    initialize_root(root)
+    # Bind shortcut keys
     root.bind("<Control-=>", lambda event: zoom_in())  # Ctrl+Plus for Zoom In
-    root.bind("<Control-Shift-+>", lambda event: zoom_out())  # Ctrl+Shift+Plus for Zoom Out
+    root.bind("<Control-Key-minus>", lambda event: zoom_out())  # Ctrl+Minus for Zoom Out
     root.bind("<F5>", lambda event: run_code())  # F5 for Run
-    root.bind("<Control-Shift-S>", lambda event: toggle_status_bar())  # Ctrl+Shift+S for Status Bar Toggle
+    root.bind("<Control-Shift-S>", lambda event: toggle_status_bar(root))  # Ctrl+Shift+S for Status Bar Toggle
     root.bind("<Control-Shift-W>", lambda event: toggle_word_wrap())  # Ctrl+Shift+W for Word Wrap Toggle
-
-
+    root.bind("<Control-Shift-T>", lambda event: toggle_toolbar(toolbar_frame, text_area, root))  # Ctrl+Shift+T for Toolbar Toggle
 
     return viewMenu

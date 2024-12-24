@@ -1,6 +1,7 @@
 import tkinter as tk
 from components.View.view import View
 from components.File.file import File
+from components.Toolbar.toolbar import toolbar
 
 # Start the GUI:
 root = tk.Tk()
@@ -24,20 +25,25 @@ root.wm_iconbitmap('mainicon.ico')
 
 # Create the main text area:
 text_area = tk.Text(root, wrap="word", undo=True, font=("Arial", 12))
-text_area.pack(expand=1, fill="both")
 
 # Initialize the main menu:
 menu = tk.Menu(root)
 root.config(menu=menu)  # Link the menu to the root window
 
+# Show toolbar by default (using the toolbar function)
+toolbar_frame = toolbar(root, text_area)
+toolbar_frame.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)  # Toolbar is packed first
 
 # Add File Menu:
 fileMenu = File(root, text_area)
 menu.add_cascade(label="File", menu=fileMenu)
 
 # Add View Menu (ensure View menu is working correctly):
-viewMenu = View(root, text_area)
+viewMenu = View(root, text_area, toolbar_frame)
 menu.add_cascade(label="View", menu=viewMenu)
+
+# Then pack the text area below the toolbar
+text_area.pack(expand=1, fill="both")
 
 # End the GUI:
 root.mainloop()
