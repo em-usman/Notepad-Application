@@ -7,7 +7,7 @@ def get_icons_dir():
     # Get the current file's directory (i.e., components/Theme)
     base_path = os.path.dirname(os.path.abspath(__file__))
     # Navigate one level up and then go to Theme/color
-    icons_dir = os.path.join(base_path, './color')
+    icons_dir = os.path.join(base_path, 'color')
     return icons_dir
 
 

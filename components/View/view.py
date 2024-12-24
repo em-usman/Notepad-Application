@@ -16,7 +16,6 @@ def View(root, text_area,toolbar_frame):
     status_bar_visible = True  # Initialize status_bar_visible
     # toolbar_frame = None  # To store the toolbar frame
 
-
     # Base path calculation for the icons
     base_path = os.path.dirname(os.path.abspath(__file__))
     icons_dir = os.path.abspath(os.path.join(base_path, '../../icons2'))

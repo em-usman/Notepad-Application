@@ -20,17 +20,14 @@ def center_window(window, width, height):
 center_window(root, 800, 600)
 
 # Set window title:
-root.title("Notepad Application")
-
-# App icon set:
-# root.wm_iconbitmap('mainicon.ico')
+root.title("App")
 
 # Create the main text area:
 text_area = tk.Text(root, wrap="word", undo=True, font=("Arial", 12))
 
 # Initialize the main menu:
 menu = tk.Menu(root)
-root.config(menu=menu)  # Link the menu to the root window
+root.config(menu=menu)  
 
 # Show toolbar by default (using the toolbar function)
 toolbar_frame = toolbar(root, text_area)
